@@ -29,7 +29,6 @@ public class User extends Model{
 	@JsonIgnore
 	private String salt;
 	
-	@JsonIgnore
 	private Boolean totpEnabled = false;
 	
 	@JsonIgnore

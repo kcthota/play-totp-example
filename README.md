@@ -1,6 +1,39 @@
 # Play Framework TOTP Example
 This is an example service implementation for enabling Time based One Time Password (TOTP) a.k.a two-factor authentication with Play Framework. The example uses [GoogleAuth] (https://github.com/wstrange/GoogleAuth) library for implementing TOTP.
 
+#Sample HTTP calls
+
+**Register User:** Registers the User.
+Method: POST
+Url: http://localhost:9000/api/Register
+Payload:
+``{
+"email":"test@test.com",
+"password":"test"
+}``
+
+**Login User:** Logs in the User. If TOTP is enabled for the user, /api/TOTPValidate must be called for Login to complete.
+Method: POST
+Url: http://localhost:9000/api/Login
+Payload:
+``{
+"email":"test@test.com",
+"password":"test"
+}``
+
+**Enable TOTP:** Returns the QRCode url. Replace &amp; with &.
+Method: PUT
+Url: http://localhost:9000/api/EnableTOTP
+
+**Validate TOTP:** Validates the passed in TOTP code sent and completes the login.
+Method: POST
+Url: http://localhost:9000/api/TOTPValidate
+Payload:
+``{
+"totp":854557
+}``
+
+
 ## License:
 
 Copyright 2015 Krishna Chaitanya Thota (kcthota@gmail.com)
