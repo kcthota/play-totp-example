@@ -4,7 +4,11 @@ import play.libs.F.Function0;
 import play.libs.F.Promise;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-
+/**
+ * This action is used for validating user is logged in. Actions which should be accessible post login and before TOTP authentication use this.
+ * @author chait
+ *
+ */
 public class LoginAction extends play.mvc.Action.Simple  {
 
 	protected Promise<Result> getUnauthorizedResult() {
@@ -19,6 +23,10 @@ public class LoginAction extends play.mvc.Action.Simple  {
 		return unauthorizedPromise;
 	}
 	
+	/**
+	 * checks if the user is logged in.
+	 * @param ctx
+	 */
 	public void doCheck(Context ctx) {
 		String userId = ctx.session().get("userId");
 		
@@ -27,6 +35,7 @@ public class LoginAction extends play.mvc.Action.Simple  {
 			
 		}
 	}
+	
 	
 	@Override
 	public Promise<Result> call(Context ctx) throws Throwable {

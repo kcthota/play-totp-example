@@ -6,9 +6,16 @@ import models.User;
 
 import com.avaje.ebean.Ebean;
 import com.warrenstrange.googleauth.ICredentialRepository;
-
+/**
+ * Two factor authentication repository. Loaded via Java ServiceLoader API
+ * @author chait
+ *
+ */
 public class TotpRepository implements ICredentialRepository {
 
+	/**
+	 * Gets the key for the passed in userId
+	 */
 	@Override
 	public String getSecretKey(String userId) {
 		User user = Ebean.find(User.class, userId);
@@ -18,6 +25,9 @@ public class TotpRepository implements ICredentialRepository {
 		return user.getTotpKey();
 	}
 
+	/**
+	 * Saves the TOTP key and enables totp for the user
+	 */
 	@Override
 	public void saveUserCredentials(String userId, String totpKey, int validationCode, List<Integer> scratchCodes) {
 		User user = Ebean.find(User.class, userId);

@@ -2,6 +2,11 @@ package actions;
 
 import play.mvc.Http.Context;
 
+/**
+ * Verifies if the user is loggedin and TOTP auth is complete.
+ * @author chait
+ *
+ */
 public class AuthenticatedAction extends LoginAction  {
 
 	@Override

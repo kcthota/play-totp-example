@@ -16,6 +16,10 @@ import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 
 public class LoginService extends Controller {
 	
+	/**
+	 * User registration. Passed in email and password are stored to DB. TOTPEnabled is set to false
+	 * @return
+	 */
 	public static Result register() {
 		JsonNode payload = request().body().asJson();
 		
@@ -32,7 +36,11 @@ public class LoginService extends Controller {
 		}
 	}
 	
-	
+	/**
+	 * User login operation. If TOTP is enabled, this will set totpRequired session flag to yes, else totpRequired is set to no.
+	 * userId and totpRequired=no in session is treated as fully authenticated user.
+	 * @return
+	 */
 	public static Result login() {
 		session().clear();
 		JsonNode payload = request().body().asJson();
@@ -56,6 +64,11 @@ public class LoginService extends Controller {
 		}
 	}
 	
+	/**
+	 * Enable TOTP operation for a fully logged in user.
+	 * @Authenticated action takes care of securing this end point.
+	 * @return
+	 */
 	@Authenticated
 	public static Result enableTOTP() {
 		String userId = session("userId");
@@ -67,6 +80,11 @@ public class LoginService extends Controller {
 		return ok(result);
 	}
 	
+	/**
+	 * Validates the user passed in TOTP token.
+	 * Accessible for loggedIn user with before TOTP authentication
+	 * @return
+	 */
 	@LoginRequired
 	public static Result totpValidate() {
 		JsonNode payload = request().body().asJson();
