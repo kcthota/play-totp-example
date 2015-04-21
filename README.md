@@ -44,7 +44,7 @@ Payload:
 ``
 
 ##Enable TOTP
-Returns the QRCode url. Replace &amp; with &.  
+Returns the QRCode url. Replace &amp;amp; with &.  
 Method: PUT  
 Url: http://localhost:9000/api/EnableTOTP  
 
