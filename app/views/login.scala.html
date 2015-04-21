@@ -5,13 +5,13 @@
 <html>
     @head(title)
     <body>
-        @helper.form(action = routes.Application.registerAction()) {
-        	<div id="register">
-        		<div>Register</div>
+		@helper.form(action = routes.Application.loginAction()) {
+        	<div id="login">
+        		<div>Login</div>
         		<div><input type="text" id="email" name="email" placeholder="Email"></div>
         		<div><input type="password" id="password" name="password" placeholder="Password"></div>
-        		<div><input type="submit" value="Register"></div>
-        		<div><a href="/?page=login">Login</a></div>
+        		<div><input type="submit" value="Login"></div>
+        		<div><a href="/">Register</a></div>
         	</div>
 		}
     </body>

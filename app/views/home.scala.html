@@ -1,0 +1,14 @@
+@(title: String, qrUrl: String)
+
+<!DOCTYPE html>
+
+<html>
+    @head(title)
+    <body>
+       Logged in!
+       <p><a href="/enableTOTP">Enable TOTP</a></p>
+       @if(qrUrl!=null) {
+       		<img src="@qrUrl" />
+       }
+    </body>
+</html>

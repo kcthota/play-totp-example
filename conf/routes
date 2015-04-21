@@ -4,6 +4,12 @@
 
 # Home page
 GET     /                           controllers.Application.index()
+POST	/register					controllers.Application.registerAction()
+POST	/login						controllers.Application.loginAction()
+GET		/totp						controllers.Application.showTOTP()
+POST	/validateTOTP				controllers.Application.totpAction()
+GET		/enableTOTP					controllers.Application.enableTOTP()
+GET		/home						controllers.Application.home()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

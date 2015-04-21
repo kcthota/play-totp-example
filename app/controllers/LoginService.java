@@ -13,7 +13,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
-
+/**
+ * Service implementation which offers functionality via JSON
+ * @author chait
+ *
+ */
 public class LoginService extends Controller {
 	
 	/**

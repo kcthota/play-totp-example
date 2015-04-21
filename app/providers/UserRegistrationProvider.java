@@ -1,5 +1,8 @@
 package providers;
 
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+
 import models.User;
 
 import com.avaje.ebean.Ebean;
@@ -8,9 +11,8 @@ import com.avaje.ebean.Ebean;
  * @author chait
  *
  */
-public class UserRegistrationProvider extends BaseUserRegistrationProvider {
+public class UserRegistrationProvider implements IUserRegistrationProvider {
 
-	@Override
 	public User register(String username, String password) {
 		String salt = generateSalt();
 		
@@ -28,7 +30,7 @@ public class UserRegistrationProvider extends BaseUserRegistrationProvider {
 		return user;
 	}
 
-	@Override
+
 	public User login(String email, String password) {
 		User user = Ebean.find(User.class).where().eq("email", email).findUnique();
 		String hashedPassword=null;
@@ -42,6 +44,37 @@ public class UserRegistrationProvider extends BaseUserRegistrationProvider {
 		} else {
 			throw new RuntimeException("Unauthorized");
 		}
+	}
+	
+	/**
+	 * Salts and converts the user entered password to digest
+	 * @param password
+	 * @param salt
+	 * @return
+	 * @throws Exception
+	 */
+	private String getDigest(String password, String salt) throws Exception {
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		String saltedPassword=String.format("%s:%s", salt,password);
+		md.update(saltedPassword.getBytes("UTF-8"));
+		return new String(md.digest());
+	}
+	
+	/**
+	 * Generates a random salt via SecureRandom
+	 * @return
+	 */
+	private String generateSalt() {
+        SecureRandom random = new SecureRandom();
+        byte bytes[] = new byte[20];
+        random.nextBytes(bytes);
+        return new String(bytes);
+    }
+
+
+	@Override
+	public void logout() {
+		
 	}
 	
 	

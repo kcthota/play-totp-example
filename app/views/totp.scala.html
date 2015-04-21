@@ -1,0 +1,16 @@
+@(title: String)
+
+<!DOCTYPE html>
+
+<html>
+    @head(title)
+    <body>
+		@helper.form(action = routes.Application.totpAction()) {
+        	<div id="login">
+        		<div>Two-factor Authentication</div>
+        		<div><input type="text" id="totpKey" name="totpKey" placeholder="Enter code"></div>
+        		<div><input type="submit" value="Login"></div>
+        	</div>
+		}
+    </body>
+</html>
