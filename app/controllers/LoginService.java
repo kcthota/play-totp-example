@@ -1,10 +1,10 @@
 package controllers;
 
-import helpers.AuthHelper;
 import models.User;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import providers.UserRegistrationProvider;
 import annotations.Authenticated;
 import annotations.LoginRequired;
 
@@ -26,9 +26,9 @@ public class LoginService extends Controller {
 		String email = payload.get("email").asText();
 		String password = payload.get("password").asText();
 		
-		AuthHelper authHelper = new AuthHelper();
+		UserRegistrationProvider provider = new UserRegistrationProvider();
 		try {
-			User user = authHelper.registerNewUser(email, password);
+			User user = provider.register(email, password);
 			return created(Json.toJson(user));
 		} catch (Exception e) {
 			//you can throw specific error message here. For simplicity, throwing 500
@@ -48,9 +48,9 @@ public class LoginService extends Controller {
 		String email = payload.get("email").asText();
 		String password = payload.get("password").asText();
 		
-		AuthHelper authHelper = new AuthHelper();
+		UserRegistrationProvider provider = new UserRegistrationProvider();
 		try {
-			User user = authHelper.authenticate(email, password);
+			User user = provider.login(email, password);
 			session("userId", user.getId().toString());
 			if(user.getTotpEnabled()) {
 				session("totpRequired", "yes");
@@ -64,7 +64,7 @@ public class LoginService extends Controller {
 		}
 	}
 	
-	/**
+	/**s
 	 * Enable TOTP operation for a fully logged in user.
 	 * @Authenticated action takes care of securing this end point.
 	 * @return
