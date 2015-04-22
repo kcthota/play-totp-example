@@ -1,6 +1,5 @@
 package actions;
 
-import play.libs.F.Function0;
 import play.libs.F.Promise;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -12,14 +11,7 @@ import play.mvc.Result;
 public class LoginAction extends play.mvc.Action.Simple  {
 
 	protected Promise<Result> getUnauthorizedResult() {
-		Promise<Result> unauthorizedPromise = Promise.promise(new Function0<Result>() {
-
-			@Override
-			public Result apply() throws Throwable {
-				return unauthorized("Unauthorized");
-			}
-			
-		});
+		Promise<Result> unauthorizedPromise = Promise.promise(() -> unauthorized("Unauthorized"));
 		return unauthorizedPromise;
 	}
 	
