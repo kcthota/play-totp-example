@@ -1,7 +1,9 @@
 package providers;
 
 import java.util.List;
+import java.util.UUID;
 
+import models.BackupCodes;
 import models.User;
 
 import com.avaje.ebean.Ebean;
@@ -30,10 +32,27 @@ public class TotpRepository implements ICredentialRepository {
 	 */
 	@Override
 	public void saveUserCredentials(String userId, String totpKey, int validationCode, List<Integer> scratchCodes) {
-		User user = Ebean.find(User.class, userId);
-		user.setTotpEnabled(true);
-		user.setTotpKey(totpKey);
-		user.save();
+		//ebean transaction
+		Ebean.execute(() -> {
+			User user = Ebean.find(User.class, userId);
+			user.setTotpEnabled(true);
+			user.setTotpKey(totpKey);
+			user.save();
+			
+			BackupCodes backupCodes= Ebean.find(BackupCodes.class, userId);
+			if(backupCodes==null) {
+				backupCodes = new BackupCodes();
+				backupCodes.setUserId(UUID.fromString(userId));
+			}
+			
+			backupCodes.setCode1(scratchCodes.get(0));
+			backupCodes.setCode2(scratchCodes.get(1));
+			backupCodes.setCode3(scratchCodes.get(2));
+			backupCodes.setCode4(scratchCodes.get(3));
+			backupCodes.setCode5(scratchCodes.get(4));
+			backupCodes.save();
+		});
+		
 	}
 
 }

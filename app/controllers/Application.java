@@ -1,21 +1,22 @@
 package controllers;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.warrenstrange.googleauth.GoogleAuthenticator;
-import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
-import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
-
-import annotations.Authenticated;
-import annotations.LoginRequired;
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import providers.UserRegistrationProvider;
-import views.html.*;
+import views.html.home;
+import views.html.index;
+import views.html.login;
+import views.html.totp;
+import annotations.Authenticated;
+import annotations.LoginRequired;
+
+import com.warrenstrange.googleauth.GoogleAuthenticator;
+import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
+import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 /**
  * Service implementation offering functionality with simple html forms
  * @author chait
@@ -42,7 +43,7 @@ public class Application extends Controller {
     	Logger.debug("email:"+email);
     	UserRegistrationProvider provider = new UserRegistrationProvider();
     	try {
-    		User user = provider.register(email, password);
+    		provider.register(email, password);
     	} catch(Exception e) {
     		return internalServerError(e.getMessage());
     	}
