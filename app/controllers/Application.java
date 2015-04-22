@@ -14,7 +14,6 @@ import views.html.totp;
 import annotations.Authenticated;
 import annotations.LoginRequired;
 
-import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 /**
@@ -77,8 +76,8 @@ public class Application extends Controller {
     @Authenticated
     public static Result enableTOTP() {
     	String userId = session("userId");
-		GoogleAuthenticator gAuth = new GoogleAuthenticator();
-		GoogleAuthenticatorKey gKey = gAuth.createCredentials(userId);
+    	UserRegistrationProvider provider = new UserRegistrationProvider();
+		GoogleAuthenticatorKey gKey = provider.enableTOTP(userId);
 		String qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL("TOTP-example", userId, gKey);
     	return ok(home.render(APP_NAME, qrUrl));
     }
@@ -88,11 +87,11 @@ public class Application extends Controller {
     	
     	DynamicForm requestData = Form.form().bindFromRequest();
     	String totpKey = requestData.get("totpKey");
-    	Integer totp = Integer.parseInt(totpKey);
+    	Integer token = Integer.parseInt(totpKey);
     	String userId = session("userId");
 		
-		GoogleAuthenticator gAuth = new GoogleAuthenticator();
-		if(gAuth.authorizeUser(userId, totp)) {
+    	UserRegistrationProvider provider = new UserRegistrationProvider();
+		if(provider.validateTOTP(userId, token)) {
 			//clear the totp flag
 			session("totpRequired", "no");
 			return redirect("/home");

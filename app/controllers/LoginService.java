@@ -10,7 +10,6 @@ import annotations.LoginRequired;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 /**
@@ -76,8 +75,8 @@ public class LoginService extends Controller {
 	@Authenticated
 	public static Result enableTOTP() {
 		String userId = session("userId");
-		GoogleAuthenticator gAuth = new GoogleAuthenticator();
-		GoogleAuthenticatorKey gKey = gAuth.createCredentials(userId);
+		UserRegistrationProvider provider = new UserRegistrationProvider();
+		GoogleAuthenticatorKey gKey = provider.enableTOTP(userId);
 		String qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL("TOTP-example", userId, gKey);
 		ObjectNode result = Json.newObject();
 		result.put("qrURL", qrUrl);
@@ -93,18 +92,17 @@ public class LoginService extends Controller {
 	public static Result totpValidate() {
 		JsonNode payload = request().body().asJson();
 		
-		Integer totp = payload.get("totp").asInt();
+		Integer token = payload.get("totp").asInt();
 		String userId = session("userId");
 		
-		GoogleAuthenticator gAuth = new GoogleAuthenticator();
-		if(gAuth.authorizeUser(userId, totp)) {
+		UserRegistrationProvider provider = new UserRegistrationProvider();
+		if(provider.validateTOTP(userId, token)) {
 			//clear the totp flag
 			session("totpRequired", "no");
 			return noContent();
 		}
 		
 		return unauthorized("TOTP validation failed!");
-		
 	}
 	
 

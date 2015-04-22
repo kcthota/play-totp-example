@@ -6,13 +6,16 @@ import java.security.SecureRandom;
 import models.User;
 
 import com.avaje.ebean.Ebean;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
+import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 /**
  * Provider for offer user registration and login
  * @author chait
  *
  */
 public class UserRegistrationProvider implements IUserRegistrationProvider {
-
+	
+	@Override
 	public User register(String username, String password) {
 		String salt = generateSalt();
 		
@@ -30,7 +33,7 @@ public class UserRegistrationProvider implements IUserRegistrationProvider {
 		return user;
 	}
 
-
+	@Override
 	public User login(String email, String password) {
 		User user = Ebean.find(User.class).where().eq("email", email).findUnique();
 		String hashedPassword=null;
@@ -46,6 +49,25 @@ public class UserRegistrationProvider implements IUserRegistrationProvider {
 		}
 	}
 	
+	
+	@Override
+	public GoogleAuthenticatorKey enableTOTP(String username) {
+		GoogleAuthenticator gAuth = new GoogleAuthenticator();
+		GoogleAuthenticatorKey gKey = gAuth.createCredentials(username);
+		return gKey;
+	}
+	
+	@Override
+	public boolean validateTOTP(String username, Integer token) {
+		GoogleAuthenticator gAuth = new GoogleAuthenticator();
+		return gAuth.authorizeUser(username, token);
+	}
+
+	@Override
+	public void logout() {
+		
+	}
+
 	/**
 	 * Salts and converts the user entered password to digest
 	 * @param password
@@ -72,10 +94,7 @@ public class UserRegistrationProvider implements IUserRegistrationProvider {
     }
 
 
-	@Override
-	public void logout() {
-		
-	}
+	
 	
 	
 }
