@@ -1,0 +1,17 @@
+@(title: String)
+
+<!DOCTYPE html>
+
+<html>
+    @head(title)
+    <body>
+		@helper.form(action = routes.Application.scratchCodeLoginAction()) {
+        	<div id="login">
+        		<div>Backup Code Authentication</div>
+        		<div><input type="text" id="backupKey" name="backupKey" placeholder="Enter code"></div>
+        		<div><input type="submit" value="Login"></div>
+        	</div>
+        	<div><a href="?page=totp">Enter TOTP Code</a></div>
+		}
+    </body>
+</html>

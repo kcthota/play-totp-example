@@ -11,6 +11,7 @@ import views.html.home;
 import views.html.index;
 import views.html.login;
 import views.html.totp;
+import views.html.backup;
 import annotations.Authenticated;
 import annotations.LoginRequired;
 
@@ -101,8 +102,32 @@ public class Application extends Controller {
     }
     
     @LoginRequired
+    public static Result scratchCodeLoginAction() {
+    	
+    	DynamicForm requestData = Form.form().bindFromRequest();
+    	String backupKey = requestData.get("backupKey");
+    	Integer token = Integer.parseInt(backupKey);
+    	String userId = session("userId");
+		
+    	UserRegistrationProvider provider = new UserRegistrationProvider();
+		if(provider.loginWithScratchCodes(userId, token)) {
+			//clear the totp flag
+			session("totpRequired", "no");
+			return redirect("/home");
+		}
+		
+		return unauthorized("Login failed!");
+    }
+    
+    @LoginRequired
     public static Result showTOTP() {
-		return ok(totp.render(APP_NAME));
+    	String page = request().getQueryString("page");
+    	
+    	if("backup".equals(page)) {
+			return ok(backup.render(APP_NAME));
+		} else {
+			return ok(totp.render(APP_NAME));
+		}
     }
     
     @Authenticated
