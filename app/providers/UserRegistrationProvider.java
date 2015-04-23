@@ -3,6 +3,7 @@ package providers;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 
+import models.BackupCodes;
 import models.User;
 
 import com.avaje.ebean.Ebean;
@@ -72,7 +73,18 @@ public class UserRegistrationProvider implements IUserRegistrationProvider {
 
 	@Override
 	public void disableTOTP(String username) {
-		
+		//ebean transaction
+		Ebean.execute(() -> {
+			User user = Ebean.find(User.class, username);
+			user.setTotpEnabled(false);
+			user.setTotpKey(null);
+			user.save();
+			
+			BackupCodes backupCodes= Ebean.find(BackupCodes.class, username);
+			if(backupCodes!=null) {
+				backupCodes.delete();
+			}
+		});
 		
 	}
 
