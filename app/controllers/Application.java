@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.Arrays;
+
 import models.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -80,7 +82,8 @@ public class Application extends Controller {
     	UserRegistrationProvider provider = new UserRegistrationProvider();
 		GoogleAuthenticatorKey gKey = provider.enableTOTP(userId);
 		String qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL("TOTP-example", userId, gKey);
-    	return ok(home.render(APP_NAME, qrUrl));
+		String scratchCodes = Arrays.toString(gKey.getScratchCodes().toArray());
+    	return ok(home.render(APP_NAME, qrUrl, scratchCodes));
     }
     
     @LoginRequired
@@ -132,7 +135,7 @@ public class Application extends Controller {
     
     @Authenticated
     public static Result home() {
-    	return ok(home.render(APP_NAME, null));
+    	return ok(home.render(APP_NAME, null, null));
     }
     
 }

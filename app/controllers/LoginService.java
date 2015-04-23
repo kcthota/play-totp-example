@@ -83,7 +83,7 @@ public class LoginService extends Controller {
 		String qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL("TOTP-example", userId, gKey);
 		ObjectNode result = Json.newObject();
 		result.put("qrURL", qrUrl);
-		result.put("scratchCodes", Arrays.toString(gKey.getScratchCodes().toArray()));
+		result.put("scratchCodes", Json.toJson(gKey.getScratchCodes()));
 		return ok(result);
 	}
 	

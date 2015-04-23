@@ -1,4 +1,4 @@
-@(title: String, qrUrl: String)
+@(title: String, qrUrl: String, scratchCodes: String)
 
 <!DOCTYPE html>
 
@@ -9,6 +9,10 @@
        <p><a href="/enableTOTP">Enable TOTP</a></p>
        @if(qrUrl!=null) {
        		<img src="@qrUrl" />
+       }
+       
+       @if(scratchCodes!=null) {
+       		<div>Your backup codes: @scratchCodes</div>
        }
     </body>
 </html>
