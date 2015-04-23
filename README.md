@@ -59,6 +59,22 @@ Payload:
 }  
 ``
 
+##Disable TOTP
+Disables two-factor authentication for the user  
+Method: PUT  
+Url: http://localhost:9000/api/DisableTOTP  
+
+##Login with Backup Codes
+Login with Backup codes. Also disables two-factor authentication post successful login.  
+Method: POST  
+Url: http://localhost:9000/api/LoginWithScratchCodes  
+Payload:  
+``  
+{  
+"totp":85455712  
+}  
+``
+
 #Action Composition
 The implementation has two action composition annotations defined.
 

@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.Arrays;
+
 import models.User;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -77,9 +79,11 @@ public class LoginService extends Controller {
 		String userId = session("userId");
 		UserRegistrationProvider provider = new UserRegistrationProvider();
 		GoogleAuthenticatorKey gKey = provider.enableTOTP(userId);
+		
 		String qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL("TOTP-example", userId, gKey);
 		ObjectNode result = Json.newObject();
 		result.put("qrURL", qrUrl);
+		result.put("scratchCodes", Arrays.toString(gKey.getScratchCodes().toArray()));
 		return ok(result);
 	}
 	
