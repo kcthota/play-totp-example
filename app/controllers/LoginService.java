@@ -1,7 +1,5 @@
 package controllers;
 
-import java.util.Arrays;
-
 import models.User;
 import play.libs.Json;
 import play.mvc.Controller;
