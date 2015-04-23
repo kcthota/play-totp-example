@@ -7,6 +7,9 @@ import models.BackupCodes;
 import models.User;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Expr;
+import com.avaje.ebean.Junction;
+import com.avaje.ebean.Query;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 /**
@@ -68,8 +71,6 @@ public class UserRegistrationProvider implements IUserRegistrationProvider {
 	public void logout() {
 		
 	}
-	
-	
 
 	@Override
 	public void disableTOTP(String username) {
@@ -90,8 +91,26 @@ public class UserRegistrationProvider implements IUserRegistrationProvider {
 
 	@Override
 	public boolean loginWithScratchCodes(String username, Integer token) {
+		//from backupcodes where userid eq 'userid' and (code1 eq 'token' or code2 eq 'token' or code3 eq 'token' or code4 eq 'token' or code5 eq 'token')
+		BackupCodes backupCodeItem = Ebean.find(BackupCodes.class).where().conjunction()
+			.add(Expr.eq("userId", username))
+			.disjunction()
+			.add(Expr.eq("code1", token))
+			.add(Expr.eq("code2", token))
+			.add(Expr.eq("code3", token))
+			.add(Expr.eq("code4", token))
+			.add(Expr.eq("code5", token))
+			.endJunction()
+			.findUnique();
 		
-		return false;
+		if(backupCodeItem==null) {
+			return false;
+		} else {
+			//when a logs in with scratch code, we disable two-factor authentication, so user can re-enable and generate new codes
+			disableTOTP(username);
+			return true;
+		}
+		
 	}
 
 	/**
