@@ -12,7 +12,11 @@ public interface IUserRegistrationProvider {
 	
 	public GoogleAuthenticatorKey enableTOTP(String username);
 	
+	public void disableTOTP(String username);
+	
 	public boolean validateTOTP(String username, Integer token);
+	
+	public boolean loginWithScratchCodes(String username, Integer token);
 	
 	public void logout();
 

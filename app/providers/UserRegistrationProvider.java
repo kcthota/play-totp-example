@@ -67,6 +67,20 @@ public class UserRegistrationProvider implements IUserRegistrationProvider {
 	public void logout() {
 		
 	}
+	
+	
+
+	@Override
+	public void disableTOTP(String username) {
+		
+		
+	}
+
+	@Override
+	public boolean loginWithScratchCodes(String username, Integer token) {
+		
+		return false;
+	}
 
 	/**
 	 * Salts and converts the user entered password to digest
