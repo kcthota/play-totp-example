@@ -8,8 +8,6 @@ import models.User;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
-import com.avaje.ebean.Junction;
-import com.avaje.ebean.Query;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 /**

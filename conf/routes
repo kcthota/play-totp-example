@@ -16,7 +16,9 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 
 #service
-POST	/api/Register			controllers.LoginService.register()
-POST	/api/Login				controllers.LoginService.login()
-PUT		/api/EnableTOTP			controllers.LoginService.enableTOTP()
-POST	/api/TOTPValidate		controllers.LoginService.totpValidate()
+POST	/api/Register				controllers.LoginService.register()
+POST	/api/Login					controllers.LoginService.login()
+PUT		/api/EnableTOTP				controllers.LoginService.enableTOTP()
+POST	/api/TOTPValidate			controllers.LoginService.totpValidate()
+PUT		/api/DisableTOTP			controllers.LoginService.disableTOTP()
+POST	/api/LoginWithScratchCodes	controllers.LoginService.loginWithScratchCodes()

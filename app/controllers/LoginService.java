@@ -105,5 +105,35 @@ public class LoginService extends Controller {
 		return unauthorized("TOTP validation failed!");
 	}
 	
+	@Authenticated
+	public static Result disableTOTP() {
+		String userId = session("userId");
+		UserRegistrationProvider provider = new UserRegistrationProvider();
+		provider.disableTOTP(userId);
+		return noContent();
+	}
+	
+	/**
+	 * Logs in user with scratch codes
+	 * On success, disables the two-factor authentication for the user
+	 * @return
+	 */
+	@LoginRequired
+	public static Result loginWithScratchCodes() {
+		JsonNode payload = request().body().asJson();
+		
+		Integer token = payload.get("totp").asInt();
+		String userId = session("userId");
+		
+		UserRegistrationProvider provider = new UserRegistrationProvider();
+		if(provider.loginWithScratchCodes(userId, token)) {
+			//clear the totp flag
+			session("totpRequired", "no");
+			return noContent();
+		}
+		
+		return unauthorized("TOTP validation failed!");
+	}
+	
 
 }
